@@ -41,14 +41,14 @@ public class ShowService {
                 .toList();
     }
 
-    @Cacheable(cacheNames = "showsByMovie", key = "#movieId", unless = "#result == null || #result.isEmpty()")
+        @Cacheable(cacheNames = "showsByMovie", key = "#root.args[0]", unless = "#result == null || #result.isEmpty()")
     public List<Show> listShowsForMovie(String movieId) {
         return showRepository.findByMovieId(movieId).stream()
                 .map(this::normalizeShow)
                 .toList();
     }
 
-    @Cacheable(cacheNames = "shows", key = "#showId", unless = "#result == null")
+        @Cacheable(cacheNames = "shows", key = "#root.args[0]", unless = "#result == null")
     public Show getShow(String showId) {
         return showRepository.findById(showId)
                 .map(this::normalizeShow)
@@ -57,7 +57,7 @@ public class ShowService {
 
     @Caching(evict = {
             @CacheEvict(cacheNames = "shows:all", allEntries = true),
-            @CacheEvict(cacheNames = "showsByMovie", key = "#request.movieId")
+            @CacheEvict(cacheNames = "showsByMovie", key = "#root.args[0].movieId")
     })
     public Show createShow(ShowRequest request) {
         int capacity = request.getAvailableSeats();
@@ -73,7 +73,7 @@ public class ShowService {
     }
 
     @Caching(
-            put = @CachePut(cacheNames = "shows", key = "#showId"),
+            put = @CachePut(cacheNames = "shows", key = "#root.args[0]"),
             evict = {
                     @CacheEvict(cacheNames = "shows:all", allEntries = true),
                     @CacheEvict(cacheNames = "showsByMovie", key = "#result.movieId")
