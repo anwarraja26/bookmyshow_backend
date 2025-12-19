@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.example.moviebooking.model.Booking;
 
 public interface BookingRepository extends MongoRepository<Booking, String> {
-    List<Booking> findByUserUserId(String userId);
+    List<Booking> findByUserUserIdOrderByCreatedAtDesc(String userId);
 }

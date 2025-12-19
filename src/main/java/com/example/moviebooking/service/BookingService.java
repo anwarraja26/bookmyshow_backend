@@ -20,6 +20,7 @@ import com.example.moviebooking.model.Movie;
 import com.example.moviebooking.model.Show;
 import com.example.moviebooking.model.UserAccount;
 import com.example.moviebooking.repository.BookingRepository;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class BookingService {
@@ -68,11 +69,11 @@ public class BookingService {
     }
 
     public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+        return bookingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
     }
 
     public List<Booking> getBookingsForUser(String userId) {
-        return bookingRepository.findByUserUserId(userId);
+        return bookingRepository.findByUserUserIdOrderByCreatedAtDesc(userId);
     }
 
     private List<String> normalizeSeats(List<String> requestedSeats) {
