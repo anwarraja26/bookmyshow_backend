@@ -23,7 +23,8 @@ public class MovieService {
         return movieRepository.findAll();
     }
 
-    @Cacheable(cacheNames = "movies", key = "#id", unless = "#result == null")
+    // Use argument index to avoid requiring Java's -parameters flag for cache keys.
+    @Cacheable(cacheNames = "movies", key = "#root.args[0]", unless = "#result == null")
     public Movie getMovieById(String id) {
         return movieRepository.findById(id).orElse(null);
     }
